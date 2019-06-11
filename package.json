@@ -1,0 +1,25 @@
+{
+  "name": "roommates-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arminale/roommates-backend.git"
+  },
+  "author": "Armin Ale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arminale/roommates-backend/issues"
+  },
+  "homepage": "https://github.com/arminale/roommates-backend#readme",
+  "dependencies": {
+    "@hapi/joi": "^15.0.3",
+    "debug": "^4.1.1",
+    "helmet": "^3.18.0",
+    "mongoose": "^5.5.14"
+  }
+}
