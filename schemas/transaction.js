@@ -1,6 +1,6 @@
-import { Schema } from "mongoose";
+const mongoose = require("mongoose");
 
-const transactionSchema = new Schema({
+const transactionSchema = new mongoose.Schema({
   date: Date,
   amount: Number,
   payer: ObjectId,
@@ -9,4 +9,4 @@ const transactionSchema = new Schema({
   payee: ObjectId
 });
 
-export default transactionSchema;
+module.exports = transactionSchema;

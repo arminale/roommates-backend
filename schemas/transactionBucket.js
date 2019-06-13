@@ -1,9 +1,9 @@
-import { Schema } from "mongoose";
-import transactionSchema from "./transaction";
+const mongoose = require("mongoose");
+const transactionSchema = require("./transaction");
 
-const transactionBucketSchema = new Schema({
+const transactionBucketSchema = new mongoose.Schema({
   date: date,
   transactions: [transactionSchema]
 });
 
-export default transactionBucketSchema;
+module.exports = transactionBucketSchema;
