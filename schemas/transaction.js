@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
-  date: Date,
-  amount: Number,
-  payer: ObjectId,
+  date: { type: Date, required: true },
+  amount: { type: Number, required: true },
+  payer: { type: ObjectId, required: true },
   owners: [ObjectId],
-  isDebtSettlement: Boolean,
-  payee: ObjectId
+  isDebtSettlement: { type: Boolean, required: true },
+  payee: {
+    type: ObjectId,
+    required: function() {
+      return this.isDebtSettlement;
+    }
+  }
 });
 
 module.exports = transactionSchema;

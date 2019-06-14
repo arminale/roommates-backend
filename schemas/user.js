@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: { type: String, required: true },
   apartment: ObjectId
 });
