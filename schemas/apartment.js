@@ -10,7 +10,7 @@ var apartmentSchema = new mongoose.Schema({
       return (
         v &&
         v.length > 0 &&
-        array.every(v => typeof v === mongoose.Schema.Types.ObjectId)
+        array.every(v => typeof v === mongoose.SchemaTypes.ObjectId)
       );
     }
   },
@@ -21,7 +21,7 @@ var apartmentSchema = new mongoose.Schema({
       return (
         v &&
         v.length > 0 &&
-        array.every(v => typeof v === mongoose.Schema.Types.ObjectId)
+        array.every(v => typeof v === mongoose.SchemaTypes.ObjectId)
       );
     }
   },
@@ -41,4 +41,4 @@ async function createApt() {
   console.log(result);
 }
 
-module.exports = createApt;
+module.exports = apartmentSchema;
