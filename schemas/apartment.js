@@ -28,17 +28,4 @@ var apartmentSchema = new mongoose.Schema({
   debts: [debtSchema]
 });
 
-async function createApt() {
-  const Apt = mongoose.model("Apt", apartmentSchema);
-
-  const myApt = new Apt({
-    name: "t",
-    members: [],
-    transactions: [],
-    debts: []
-  });
-  result = myApt.validateSync();
-  console.log(result);
-}
-
 module.exports = apartmentSchema;
