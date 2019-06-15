@@ -6,7 +6,6 @@ const userSchema = require("../schemas/user");
 const apartmentSchema = require("../schemas/apartment");
 
 const router = express.Router();
-const Apartment = mongoose.model("Apartment", apartmentSchema);
 const User = mongoose.model("User", userSchema);
 
 router.get("/", async (req, res) => {
