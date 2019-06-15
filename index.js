@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const helmet = require("helmet");
 const debug = require("debug")("r:index.js");
+const morgan = require("morgan");
+
 const apartments = require("./routes/apartments");
 const transactions = require("./routes/transactions");
 const users = require("./routes/users");
@@ -17,6 +19,7 @@ mongoose
 
 app.use(helmet());
 app.use(express.json());
+app.use(morgan("dev"));
 app.use("/api/apartments", apartments);
 app.use("/api/users", users);
 app.use("/api/transactions", transactions);

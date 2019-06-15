@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "mongoose": "^5.5.14",
+    "morgan": "^1.9.1",
     "supports-color": "^7.0.0"
   }
 }
