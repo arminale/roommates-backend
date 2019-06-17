@@ -23,8 +23,8 @@ router.post("/", async (req, res) => {
   debug("Validating request...");
   const result = Joi.validate(req.body, schema, { stripUnknown: true });
   if (result.error) {
-    debug("Error 400: " + error.details[0].message);
-    res.status(400).send(error.details[0].message);
+    debug("Error 400: " + result.error.details[0].message);
+    res.status(400).send(result.error.details[0].message);
     return;
   }
   debug("Request validated");
@@ -63,8 +63,8 @@ router.put("/", async (req, res) => {
   debug("Validating request...");
   const result = Joi.validate(req.body, schema, { stripUnknown: true });
   if (result.error) {
-    debug("Error 400: " + error.details[0].message);
-    res.status(400).send(error.details[0].message);
+    debug("Error 400: " + result.error.details[0].message);
+    res.status(400).send(result.error.details[0].message);
     return;
   }
   debug("Request validated");
