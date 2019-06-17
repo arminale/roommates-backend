@@ -53,4 +53,15 @@ async function createTransactionBucket() {
   return transactionBucketDoc;
 }
 
-module.exports.createApartment = createApartment;
+async function addUserToApartment(userId, apartmentIdString) {
+  let apartment = await Apartment.findById(
+    mongoose.Types.ObjectId(apartmentIdString)
+  );
+  apartment.members.push(mongoose.Types.ObjectId(userId));
+  return await apartment.save();
+}
+
+module.exports = {
+  createApartment: createApartment,
+  addUserToApartment: addUserToApartment
+};

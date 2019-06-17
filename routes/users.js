@@ -4,6 +4,7 @@ const express = require("express");
 const debug = require("debug")("r:router:users");
 const userSchema = require("../schemas/user");
 const apartmentSchema = require("../schemas/apartment");
+const { addUserToApartment } = require("../controllers/apartmentController");
 
 const router = express.Router();
 const User = mongoose.model("User", userSchema);
@@ -55,7 +56,7 @@ router.put("/", async (req, res) => {
     id: Joi.string().required(),
     updateApartment: Joi.boolean(),
     apartmentId: Joi.string().when("updateApartment", {
-      is: Joi.exists(),
+      is: Joi.exist(),
       then: Joi.required()
     })
   };
@@ -71,8 +72,9 @@ router.put("/", async (req, res) => {
 
   debug("Creating update package");
   let updatePackage = {};
-  if (updateApartment) {
-    updatePackage.apartment = body.result.apartmentId;
+  if (result.value.updateApartment) {
+    updatePackage.apartment = result.value.apartmentId;
+    addUserToApartment(result.value.id, result.value.apartmentId);
   }
   debug(`Update Package: ${updatePackage}`);
   debug("Searching database for user...");
@@ -94,7 +96,7 @@ router.put("/", async (req, res) => {
     return;
   }
   debug("User updated successfully");
-  res.send(customer);
+  res.send(user);
 });
 
 module.exports = router;
