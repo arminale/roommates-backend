@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const transactionSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   amount: { type: Number, required: true },
-  payer: { type: ObjectId, required: true },
-  owners: [ObjectId],
+  payer: { type: mongoose.SchemaTypes.ObjectId, required: true },
+  owners: [mongoose.SchemaTypes.ObjectId],
   isDebtSettlement: { type: Boolean, required: true },
   payee: {
-    type: ObjectId,
+    type: mongoose.SchemaTypes.ObjectId,
     required: function() {
       return this.isDebtSettlement;
     }
