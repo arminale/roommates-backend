@@ -12,39 +12,45 @@ const TransactionBucket = mongoose.model(
 );
 
 async function createApartment(user, apartmentConfig) {
-  debug(`Creating a new apartment for user: ${user}`);
-  const user = await User.find({ _id: user.id, username: user.username });
-  if (!user) {
-    throw new Error(
-      ` No user found with id: ${user.id} and username: ${user.username}`
-    );
+  debug(`Creating a new apartment for user: ${user.id}`);
+  const userDoc = await User.findOne({ _id: user.id });
+  if (!userDoc) {
+    debug(`No user found with id: ${user.id}`);
+    throw new Error(`No user found with id: ${user.id}`);
   } else {
-    if (user.apartment) {
-      throw new Error(
-        `User with id: ${user.id} and username: ${
-          user.username
-        } already has an apartment`
-      );
+    if (userDoc.apartment) {
+      debug(`User with id: ${user.id}  already has an apartment`);
+      throw new Error(`User with id: ${user.id}  already has an apartment`);
     } else {
+      debug(`User with id:${user.id} found and has no apartment`);
       const newBucket = await createTransactionBucket();
+      debug(`Created transaction bucket: ${JSON.stringify(newBucket)}`);
       let apartment = new Apartment({
         name: apartmentConfig.name,
-        members: [user._id],
-        transactionBucket: newBucket._id,
+        members: [userDoc._id],
+        transactionBuckets: [newBucket._id],
         debts: []
       });
-      apartment = await apartment.save();
-      user.apartment = apartment._id;
-      return apartment;
+      debug(`Creating apartment: ${JSON.stringify(apartment)}`);
+      apartmentDoc = await apartment.save();
+      debug(`Apartment saved as ${JSON.stringify(apartmentDoc)}`);
+      userDoc.apartment = apartmentDoc._id;
+      await userDoc.save();
+      return apartmentDoc;
     }
   }
 }
 
 async function createTransactionBucket() {
+  let beginBucketDate = new Date();
+  beginBucketDate.setUTCDate(1);
+  beginBucketDate.setHours(0, 0, 0, 0);
   let transactionBucket = new TransactionBucket({
-    date: new Date(Date.now.getUTCYFullYear(), Date.now.getUTCYMonth()),
+    date: beginBucketDate,
     transactions: []
   });
-  transactionBucket = transactionBucket.save();
-  return transactionBucket;
+  transactionBucketDoc = await transactionBucket.save();
+  return transactionBucketDoc;
 }
+
+module.exports.createApartment = createApartment;
