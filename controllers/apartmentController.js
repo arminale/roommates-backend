@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const debug = require("debug")("r:controller:apartment");
+const _ = require("lodash");
 const apartmentSchema = require("../schemas/apartment");
 const userSchema = require("../schemas/user");
 const transactionBucketSchema = require("../schemas/transactionBucket");
@@ -57,7 +58,11 @@ async function addUserToApartment(userId, apartmentIdString) {
   let apartment = await Apartment.findById(
     mongoose.Types.ObjectId(apartmentIdString)
   );
-  apartment.members.push(mongoose.Types.ObjectId(userId));
+  if (_.find(apartment.members)) {
+    return apartment;
+  } else {
+    apartment.members.push(mongoose.Types.ObjectId(userId));
+  }
   return await apartment.save();
 }
 
