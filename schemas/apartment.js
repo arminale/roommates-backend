@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const debtSchema = require("./debt");
+const _ = require("lodash");
 
 var apartmentSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -27,5 +28,13 @@ var apartmentSchema = new mongoose.Schema({
   },
   debts: [debtSchema]
 });
+
+apartmentSchema.methods.addMember = function(userId) {
+  if (_.find(this.members, userId)) {
+    return;
+  } else {
+    this.members.push(userId);
+  }
+};
 
 module.exports = apartmentSchema;

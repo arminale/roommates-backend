@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const debug = require("debug")("r:controller:apartment");
-const _ = require("lodash");
 const apartmentSchema = require("../schemas/apartment");
 
 const Apartment = mongoose.model("Apartment", apartmentSchema);
