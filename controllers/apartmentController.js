@@ -18,6 +18,10 @@ async function createApartment(user, apartmentConfig) {
   return apartmentDoc;
 }
 
+async function getApartment(apartmentId) {
+  return await Apartment.findById(apartmentId);
+}
 module.exports = {
-  createApartment: createApartment
+  createApartment: createApartment,
+  getApartment: getApartment
 };

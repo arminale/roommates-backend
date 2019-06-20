@@ -1,13 +1,19 @@
 const Joi = require("@hapi/joi");
 const express = require("express");
 const debug = require("debug")("r:router:users");
-const { isUserUnique, createUser } = require("../controllers/userController");
+const {
+  isUserUnique,
+  createUser,
+  updateUser
+} = require("../controllers/userController");
+const { getApartment } = require("../controllers/apartmentController");
+
+const router = express.Router();
 
 router.get("/", async (req, res) => {
   debug("GET /api/users");
   debug("Searching database...");
-  const userlist = await User.find().sort({ username: 1 });
-  res.send(userlist);
+  res.send("List all users");
 });
 
 router.post("/", async (req, res) => {
@@ -37,7 +43,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.put("/apartment", async (req, res) => {
   const schema = {
     username: Joi.string().required(),
     id: Joi.string().required(),
@@ -61,11 +67,11 @@ router.put("/", async (req, res) => {
   let updatePackage = {};
   if (result.value.updateApartment) {
     updatePackage.apartment = result.value.apartmentId;
-    addUserToApartment(result.value.id, result.value.apartmentId);
+    getApartment(result.value.apartmentId).addMember(result.value.id);
   }
   debug(`Update Package: ${updatePackage}`);
   debug("Searching database for user...");
-  const user = await User.findByIdAndUpdate(result.value.id, updatePackage);
+  const user = await updateUser(result.value.id, updatePackage);
 
   if (!user) {
     debug(

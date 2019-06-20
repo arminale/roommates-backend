@@ -13,4 +13,12 @@ async function createUser(userConfig) {
   user = await user.save();
 }
 
-module.exports = { isUserUnique: isUserUnique, createUser: createUser };
+async function updateUser(userId, updatePackage) {
+  return await User.findByIdAndUpdate(userId, updatePackage);
+}
+
+module.exports = {
+  isUserUnique: isUserUnique,
+  createUser: createUser,
+  updateUser: updateUser
+};
