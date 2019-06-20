@@ -18,17 +18,6 @@ async function createApartment(user, apartmentConfig) {
   return apartmentDoc;
 }
 
-async function addUserToApartment(userId, apartmentId) {
-  let apartment = await Apartment.findById(apartmentId);
-  if (_.find(apartment.members)) {
-    return apartment;
-  } else {
-    apartment.members.push(userId);
-  }
-  return await apartment.save();
-}
-
 module.exports = {
-  createApartment: createApartment,
-  addUserToApartment: addUserToApartment
+  createApartment: createApartment
 };
