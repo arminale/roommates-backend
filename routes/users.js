@@ -1,13 +1,7 @@
 const Joi = require("@hapi/joi");
-const mongoose = require("mongoose");
 const express = require("express");
 const debug = require("debug")("r:router:users");
-const userSchema = require("../schemas/user");
-const apartmentSchema = require("../schemas/apartment");
-const { addUserToApartment } = require("../controllers/apartmentController");
-
-const router = express.Router();
-const User = mongoose.model("User", userSchema);
+const { isUserUnique, createUser } = require("../controllers/userController");
 
 router.get("/", async (req, res) => {
   debug("GET /api/users");
@@ -31,22 +25,15 @@ router.post("/", async (req, res) => {
   debug("Request validated");
 
   debug("Checking for duplicates...");
-  const exists =
-    (await User.find({ username: result.value.username })).length !== 0;
-  if (exists) {
-    debug(`Error: User with username ${result.value.username} already exists`);
-    res
-      .status(400)
-      .send(`User with username ${result.value.username} already exists`);
+  if (await isUserUnique(result.value)) {
+    debug(`Error: User already exists`);
+    res.status(400).send(`User already exists`);
     return;
   } else {
     debug(
       `Username is free. Creating user with username:${result.value.username}`
     );
-    let user = new User({ username: result.value.username });
-    debug(user);
-    user = await user.save();
-    res.send(user);
+    res.send(await createUser(result.value));
   }
 });
 
