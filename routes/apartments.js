@@ -5,6 +5,7 @@ const debug = require("debug")("r:router:apartments");
 const router = express.Router();
 const apartmentSchema = require("../schemas/apartment");
 const apartmentController = require("../controllers/apartmentController");
+const userController = require("../controllers/userController");
 const Apartments = mongoose.model("Apartment", apartmentSchema);
 
 router.get("/", async (req, res) => {
@@ -26,21 +27,32 @@ router.post("/", async (req, res) => {
     return;
   } else {
     debug("Request validated");
-    const user = { id: result.value.userId };
+    const userInfo = { idString: result.value.userId };
     const apartmentConfig = { name: result.value.apartmentName };
     debug(
       `Attempting to create apartment with user: ${JSON.stringify(
-        user
+        userInfo
       )} and apartmentConfig: ${JSON.stringify(apartmentConfig)}`
     );
-    try {
-      res.send(
-        await apartmentController.createApartment(user, apartmentConfig)
-      );
-    } catch {
-      res.status(409).send("Error creating apartment");
+
+    let apartment = apartmentController.createApartment(
+      userInfo,
+      apartmentConfig
+    );
+    apartment = await apartment.save();
+    const { user, error } = await userController.addApartment(
+      userInfo.idString,
+      apartment._id
+    );
+    if (error) {
+      apartmentController.deleteApartment(apartment._id);
+      res.status(405).send(error.message);
+      return;
+    } else {
+      user.save();
+      res.send({ apartment: apartment, user: user });
+      return;
     }
-    return;
   }
 });
 module.exports = router;

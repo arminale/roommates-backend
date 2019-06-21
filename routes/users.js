@@ -1,12 +1,8 @@
 const Joi = require("@hapi/joi");
 const express = require("express");
 const debug = require("debug")("r:router:users");
-const {
-  isUserUnique,
-  createUser,
-  updateUser
-} = require("../controllers/userController");
-const { getApartment } = require("../controllers/apartmentController");
+const userController = require("../controllers/userController");
+const apartmentController = require("../controllers/apartmentController");
 
 const router = express.Router();
 
@@ -31,7 +27,7 @@ router.post("/", async (req, res) => {
   debug("Request validated");
 
   debug("Checking for duplicates...");
-  if (await isUserUnique(result.value)) {
+  if (await userController.isUserUnique(result.value)) {
     debug(`Error: User already exists`);
     res.status(400).send(`User already exists`);
     return;
@@ -39,7 +35,7 @@ router.post("/", async (req, res) => {
     debug(
       `Username is free. Creating user with username:${result.value.username}`
     );
-    res.send(await createUser(result.value));
+    res.send(await userController.createUser(result.value).save());
   }
 });
 
@@ -67,11 +63,13 @@ router.put("/apartment", async (req, res) => {
   let updatePackage = {};
   if (result.value.updateApartment) {
     updatePackage.apartment = result.value.apartmentId;
-    getApartment(result.value.apartmentId).addMember(result.value.id);
+    apartmentController
+      .getApartment(result.value.apartmentId)
+      .addMember(result.value.id);
   }
   debug(`Update Package: ${updatePackage}`);
   debug("Searching database for user...");
-  const user = await updateUser(result.value.id, updatePackage);
+  const user = await userController.updateUser(result.value.id, updatePackage);
 
   if (!user) {
     debug(

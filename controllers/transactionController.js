@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const transactionBucketSchema = require("../schemas/transactionBucket");
+const debug = require("debug")("r:controller:transaction");
 
 const TransactionBucket = new mongoose.model(
   "Transaction Bucket",

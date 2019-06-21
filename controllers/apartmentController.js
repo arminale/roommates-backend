@@ -4,22 +4,26 @@ const apartmentSchema = require("../schemas/apartment");
 
 const Apartment = mongoose.model("Apartment", apartmentSchema);
 
-async function createApartment(user, apartmentConfig) {
-  debug(`Creating a new apartment for user: ${user.id}`);
+function createApartment(user, apartmentConfig) {
+  debug(`Creating a new apartment for user: ${user.idString}`);
   let apartment = new Apartment({
     name: apartmentConfig.name,
-    members: [user.id],
+    members: [mongoose.Types.ObjectId(user.idString)],
     transactionBuckets: [],
     debts: []
   });
   debug(`Creating apartment: ${JSON.stringify(apartment)}`);
-  apartmentDoc = await apartment.save();
-  debug(`Apartment saved as ${JSON.stringify(apartmentDoc)}`);
-  return apartmentDoc;
+  return apartment;
 }
 
 async function getApartment(apartmentId) {
   return await Apartment.findById(apartmentId);
+}
+
+async function deleteApartment(apartmentIdString) {
+  return await Apartment.findByIdAndDelete(
+    mongoose.Types.ObjectId(apartmentIdString)
+  );
 }
 module.exports = {
   createApartment: createApartment,
