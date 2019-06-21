@@ -15,7 +15,9 @@ function createUser(userConfig) {
 }
 
 async function updateUser(userIdString, updatePackage) {
-  return await User.findByIdAndUpdate(userIdString, updatePackage);
+  return await User.findByIdAndUpdate(userIdString, updatePackage, {
+    new: true
+  });
 }
 
 async function getUser(userIdString) {

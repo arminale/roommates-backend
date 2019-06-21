@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/apartment", async (req, res) => {
+router.put("/", async (req, res) => {
   const schema = {
     username: Joi.string().required(),
     id: Joi.string().required(),
@@ -61,16 +61,18 @@ router.put("/apartment", async (req, res) => {
 
   debug("Creating update package");
   let updatePackage = {};
+  let externalUpdatedDoc;
   if (result.value.updateApartment) {
     updatePackage.apartment = result.value.apartmentId;
-    apartmentController
-      .getApartment(result.value.apartmentId)
-      .addMember(result.value.id);
+    externalUpdatedDoc = await apartmentController.getApartment(
+      result.value.apartmentId
+    );
+    externalUpdatedDoc.addMember(result.value.id);
   }
   debug(`Update Package: ${updatePackage}`);
   debug("Searching database for user...");
   const user = await userController.updateUser(result.value.id, updatePackage);
-
+  debug(user);
   if (!user) {
     debug(
       `No user found with the ID: ${result.value.id} and username: ${
@@ -85,6 +87,9 @@ router.put("/apartment", async (req, res) => {
         }.`
       );
     return;
+  }
+  if (externalUpdatedDoc) {
+    externalUpdatedDoc.save();
   }
   debug("User updated successfully");
   res.send(user);

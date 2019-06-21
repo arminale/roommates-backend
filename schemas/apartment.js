@@ -29,11 +29,11 @@ var apartmentSchema = new mongoose.Schema({
   debts: [debtSchema]
 });
 
-apartmentSchema.methods.addMember = function(userId) {
-  if (_.find(this.members, userId)) {
+apartmentSchema.methods.addMember = function(userIdString) {
+  if (_.find(this.members, mongoose.Types.ObjectId(userIdString))) {
     return;
   } else {
-    this.members.push(userId);
+    this.members.push(mongoose.Types.ObjectId(userIdString));
   }
 };
 
