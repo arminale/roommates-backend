@@ -1,16 +1,13 @@
 const Joi = require("@hapi/joi");
-const mongoose = require("mongoose");
 const express = require("express");
 const debug = require("debug")("r:router:apartments");
 const router = express.Router();
-const apartmentSchema = require("../schemas/apartment");
+
 const apartmentController = require("../controllers/apartmentController");
 const userController = require("../controllers/userController");
-const Apartments = mongoose.model("Apartment", apartmentSchema);
 
 router.get("/", async (req, res) => {
-  const apartments = await Apartments.find().sort("name");
-  res.send(apartments);
+  res.send("List of apartments");
 });
 
 router.post("/", async (req, res) => {
