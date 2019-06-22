@@ -32,11 +32,25 @@ router.post("/", async (req, res) => {
   let apartment = await apartmentController.getApartment(
     result.value.apartmentId
   );
-
-  transaction = transactionController.createTransaction(
+  const transaction = transactionController.createTransaction(
     result.value,
     apartment
   );
+
+  let bucketId = apartment.getBucketForDate(transaction.date);
+  if (bucketId) {
+    let bucket = transactionController.getTransactionBucket(bucketId);
+    bucket.addTransaction(transaction);
+    await bucket.save();
+  } else {
+    let bucket = transactionController.createTransactionBucket(
+      transaction.date
+    );
+    bucket.addTransaction(transaction);
+    bucket = await bucket.save();
+    apartment.addBucket(bucket);
+    apartment.save();
+  }
 });
 
 module.exports = router;

@@ -9,12 +9,11 @@ const TransactionBucket = new mongoose.model(
   transactionBucketSchema
 );
 
-function createTransactionBucket() {
-  let beginBucketDate = new Date();
-  beginBucketDate.setUTCDate(1);
-  beginBucketDate.setHours(0, 0, 0, 0);
+function createTransactionBucket(startDate) {
+  startDate.setUTCDate(1);
+  startDate.setHours(0, 0, 0, 0);
   let transactionBucket = new TransactionBucket({
-    date: beginBucketDate,
+    date: startDate,
     transactions: []
   });
   return transactionBucket;
