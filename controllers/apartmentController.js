@@ -16,8 +16,8 @@ function createApartment(user, apartmentConfig) {
   return apartment;
 }
 
-async function getApartment(apartmentId) {
-  return await Apartment.findById(apartmentId);
+async function getApartment(apartmentIdString) {
+  return await Apartment.findById(mongoose.Types.ObjectId(apartmentIdString));
 }
 
 async function deleteApartment(apartmentIdString) {
