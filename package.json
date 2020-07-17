@@ -22,7 +22,7 @@
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "jest": "^24.8.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "mongoose": "^5.5.14",
     "morgan": "^1.9.1",
     "supports-color": "^7.0.0"
